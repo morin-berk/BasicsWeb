@@ -1,12 +1,12 @@
 const mongodb = require("mongodb").MongoClient;
 const csvtojson = require("csvtojson");
+const readline = require('readline-sync')
+const name = readline.question('enter csv file name')
 
 let url = "mongodb://localhost:27017/";
 
-// console.log(process.argv) cant figure out how it works :(
-
 csvtojson()
-    .fromFile("bestsellers.csv")
+    .fromFile(name)
     .then(csvData => {
         console.log(csvData);
 
@@ -18,10 +18,9 @@ csvtojson()
 
                 client
                     .db("nodejs_practice")
-                    .collection("bestsellers")
+                    .collection("my_collection")
                     .insertMany(csvData, (err, res) => {
                         if (err) throw err;
-
                         console.log(`Inserted: ${res.insertedCount} rows`);
                         client.close();
                     });
